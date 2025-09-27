@@ -1,4 +1,4 @@
-﻿#include<iostream>
+#include<iostream>
 #include<windows.h>
 #include<algorithm>
 #include<conio.h>
@@ -9,7 +9,6 @@
 #include<cwchar>
 #include<cmath>
 #include<vector>
-//#define en //若中文显示乱码,去掉,前面的注释再编译
 #ifndef COMMON_LVB_UNDERSCORE
 #define COMMON_LVB_UNDERSCORE 32768
 #endif
@@ -173,7 +172,7 @@ int judge(int ox, int oy, int nx, int ny) {//-1：违反所有棋子的基本规
 				return -2;//将超出限制
 			}
 		}
-		if (ox < 3 || ox>5) return -2;//将/帅超出X轴限制
+		if (nx < 3 || nx>5) return -2;//将/帅超出X轴限制
 		if (manhattan(ox, oy, nx, ny) > 1) return -3;//将帅的移动等价于曼哈顿距离为1的点(以下同理）
 	}
 	if (o.v == 2) {
@@ -310,17 +309,6 @@ int main() {
 				if (t.s == 0) std::cout << " +";
 				if (t.s == 1) {
 					color(1, 7);
-					#ifdef en
-					if (i == y && j == x) color(3, 7);
-					if (t.v == 1) std::cout << "k1";//取自king
-					if (t.v == 2) std::cout << "se";//取自sever
-					if (t.v == 3) std::cout << "mi";//取自minister
-					if (t.v == 4) std::cout << "ho";//取自horse
-					if (t.v == 5) std::cout << "ca";//取自car
-					if (t.v == 6) std::cout << "co";//取自cannon
-					if (t.v == 7) std::cout << "s1";//取自soldier
-					#endif
-					#ifndef en
 					if (i == y && j == x) color(3, 7);
 					if (t.v == 1) std::cout << "帥";
 					if (t.v == 2) std::cout << "仕";
@@ -329,20 +317,8 @@ int main() {
 					if (t.v == 5) std::cout << "車";
 					if (t.v == 6) std::cout << "炮";
 					if (t.v == 7) std::cout << "兵";
-					#endif
 				}
 				if (t.s == 2) {
-					#ifdef en
-					if (i == y && j == x) color(3, 7);
-					if (t.v == 1) std::cout << "k2";//取自king
-					if (t.v == 2) std::cout << "gu";//取自guard
-					if (t.v == 3) std::cout << "el";//取自elephant
-					if (t.v == 4) std::cout << "ho";//取自horse
-					if (t.v == 5) std::cout << "ca";//取自car
-					if (t.v == 6) std::cout << "ct";//取自catapult
-					if (t.v == 7) std::cout << "s2";//取自soldier
-					#endif
-					#ifndef en
 					color(0, 7);
 					if (i == y && j == x) color(3, 7);
 					if (t.v == 1) std::cout << "將";
@@ -352,7 +328,6 @@ int main() {
 					if (t.v == 5) std::cout << "車";
 					if (t.v == 6) std::cout << "砲";
 					if (t.v == 7) std::cout << "卒";
-					#endif
 				}
 			}
 			std::cout << '\n';
