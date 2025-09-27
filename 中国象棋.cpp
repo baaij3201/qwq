@@ -45,31 +45,31 @@ void color(int x, int y) {
 	HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
 	int t = 0;
 	switch (x) {
-	case 1:t= FOREGROUND_INTENSITY | FOREGROUND_RED;break;	//红
-	case 2:t= FOREGROUND_INTENSITY | FOREGROUND_BLUE;break;	//蓝
-	case 3:t= FOREGROUND_INTENSITY | FOREGROUND_GREEN;break;	//绿
-	case 4:t= FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_BLUE;break;	//红+蓝=紫
-	case 5:t= FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN;break;	//红+绿=黄
-	case 6:t= FOREGROUND_INTENSITY | FOREGROUND_BLUE | FOREGROUND_GREEN;break;	//蓝+绿=青
-	case 7:t= FOREGROUND_INTENSITY | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_RED;break;	//红+蓝+绿=白
-	case 8:t= FOREGROUND_RED;break;	//红
-	case 9:t= FOREGROUND_BLUE;break;	//蓝
-	case 10:t= FOREGROUND_GREEN;break;	//绿
-	case 11:t= FOREGROUND_RED | FOREGROUND_BLUE;break;	//红+蓝=紫
-	case 12:t= FOREGROUND_RED | FOREGROUND_GREEN;break;	//红+绿=黄
-	case 13:t= FOREGROUND_BLUE | FOREGROUND_GREEN;break;	//蓝+绿=青
-	case 14:t= FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_RED;break;	//红+蓝+绿=白
-	case 15:t= FOREGROUND_INTENSITY;//灰色
+	case 1:t = FOREGROUND_INTENSITY | FOREGROUND_RED;break;	//红
+	case 2:t = FOREGROUND_INTENSITY | FOREGROUND_BLUE;break;	//蓝
+	case 3:t = FOREGROUND_INTENSITY | FOREGROUND_GREEN;break;	//绿
+	case 4:t = FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_BLUE;break;	//红+蓝=紫
+	case 5:t = FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN;break;	//红+绿=黄
+	case 6:t = FOREGROUND_INTENSITY | FOREGROUND_BLUE | FOREGROUND_GREEN;break;	//蓝+绿=青
+	case 7:t = FOREGROUND_INTENSITY | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_RED;break;	//红+蓝+绿=白
+	case 8:t = FOREGROUND_RED;break;	//红
+	case 9:t = FOREGROUND_BLUE;break;	//蓝
+	case 10:t = FOREGROUND_GREEN;break;	//绿
+	case 11:t = FOREGROUND_RED | FOREGROUND_BLUE;break;	//红+蓝=紫
+	case 12:t = FOREGROUND_RED | FOREGROUND_GREEN;break;	//红+绿=黄
+	case 13:t = FOREGROUND_BLUE | FOREGROUND_GREEN;break;	//蓝+绿=青
+	case 14:t = FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_RED;break;	//红+蓝+绿=白
+	case 15:t = FOREGROUND_INTENSITY;//灰色
 	default:break;
 	}
 	switch (y) {
-	case 1:SetConsoleTextAttribute(handle, BACKGROUND_INTENSITY | BACKGROUND_RED|t);break;	//红
-	case 2:SetConsoleTextAttribute(handle, BACKGROUND_INTENSITY | BACKGROUND_BLUE|t);break;	//蓝
-	case 3:SetConsoleTextAttribute(handle, BACKGROUND_INTENSITY | BACKGROUND_GREEN|t);break;	//绿
-	case 4:SetConsoleTextAttribute(handle, BACKGROUND_INTENSITY | BACKGROUND_RED | BACKGROUND_BLUE|t);break;	//红+蓝=紫
-	case 5:SetConsoleTextAttribute(handle, BACKGROUND_INTENSITY | BACKGROUND_RED | BACKGROUND_GREEN|t);break;	//红+绿=黄
-	case 6:SetConsoleTextAttribute(handle, BACKGROUND_INTENSITY | BACKGROUND_BLUE | BACKGROUND_GREEN|t);break;	//蓝+绿=青
-	case 7:SetConsoleTextAttribute(handle, BACKGROUND_INTENSITY | BACKGROUND_GREEN | BACKGROUND_BLUE | BACKGROUND_RED|t);break;	//红+蓝+绿=白
+	case 1:SetConsoleTextAttribute(handle, BACKGROUND_INTENSITY | BACKGROUND_RED | t);break;	//红
+	case 2:SetConsoleTextAttribute(handle, BACKGROUND_INTENSITY | BACKGROUND_BLUE | t);break;	//蓝
+	case 3:SetConsoleTextAttribute(handle, BACKGROUND_INTENSITY | BACKGROUND_GREEN | t);break;	//绿
+	case 4:SetConsoleTextAttribute(handle, BACKGROUND_INTENSITY | BACKGROUND_RED | BACKGROUND_BLUE | t);break;	//红+蓝=紫
+	case 5:SetConsoleTextAttribute(handle, BACKGROUND_INTENSITY | BACKGROUND_RED | BACKGROUND_GREEN | t);break;	//红+绿=黄
+	case 6:SetConsoleTextAttribute(handle, BACKGROUND_INTENSITY | BACKGROUND_BLUE | BACKGROUND_GREEN | t);break;	//蓝+绿=青
+	case 7:SetConsoleTextAttribute(handle, BACKGROUND_INTENSITY | BACKGROUND_GREEN | BACKGROUND_BLUE | BACKGROUND_RED | t);break;	//红+蓝+绿=白
 	case 8:SetConsoleTextAttribute(handle, BACKGROUND_RED | t);break;	//红
 	case 9:SetConsoleTextAttribute(handle, BACKGROUND_BLUE | t);break;	//蓝
 	case 10:SetConsoleTextAttribute(handle, BACKGROUND_GREEN | t);break;	//绿
@@ -89,8 +89,8 @@ struct po {
 	int s;//阵营，1为红 2为黑，0为空 
 };
 int chebyshev(int x1, int y1, int x2, int y2) {
-	int x = abs(x1- x2);
-	int y = abs(y1-y2);
+	int x = abs(x1 - x2);
+	int y = abs(y1 - y2);
 	if (x > y) return x;
 	return y;
 }
@@ -123,7 +123,7 @@ void init() {
 	map[7][1] = map[7][7] = { 6,2 };//砲
 	map[6][0] = map[6][2] = map[6][4] = map[6][6] = map[6][8] = { 7,2 };//卒 
 }
-int gameover(bool hh){
+int gameover(bool hh) {
 	bool k1 = 0, k2 = 0;
 	int k1x = 0, k2x = 0, k1y = 0, k2y = 0;
 	for (int i = 0;i < 10;i++) {//先清空 
@@ -144,10 +144,10 @@ int gameover(bool hh){
 	if (!k1 && k2) return 2;//黑方胜利
 	if (k1x == k2x) {
 		int cnt = 0;
-		int s,e;
+		int s, e;
 		if (k1y < k2y) s = k1y, e = k2y;
 		else s = k2y, e = k1y;//理论上不可能发生
-		for (int i = s+1;i < e;i++) {
+		for (int i = s + 1;i < e;i++) {
 			if (map[i][k1x].s != 0) return 0;
 		}
 		if (hh == 1) return 2;
@@ -177,16 +177,16 @@ int judge(int ox, int oy, int nx, int ny) {//-1：违反所有棋子的基本规
 	}
 	if (o.v == 2) {
 		if (o.s == 1) {//九宫格-仕的Y轴限制
-			if (ny > 3) {
+			if (ny >= 3) {
 				return -2;
 			}
 		}
 		if (o.s == 2) {//九宫格-士的Y轴限制
-			if (ny < 6) {
+			if (ny <= 6) {
 				return -2;
 			}
 		}
-		if (ox < 3 || ox>5) return -2;//超出X轴限制
+		if (nx < 3 || nx>5) return -2;//超出X轴限制
 		if (manhattan(ox, oy, nx, ny) != 2 || chebyshev(ox, oy, nx, ny) != 1) return -3;
 	}
 	if (o.v == 3) {
@@ -207,7 +207,7 @@ int judge(int ox, int oy, int nx, int ny) {//-1：违反所有棋子的基本规
 			if (map[oy][ox + xx / 2].s != 0) return -4;
 		}
 		else {
-			if (map[oy + yy/2][ox].s != 0) return -4;
+			if (map[oy + yy / 2][ox].s != 0) return -4;
 		}
 	}
 	if (o.v == 5) {
@@ -231,12 +231,12 @@ int judge(int ox, int oy, int nx, int ny) {//-1：违反所有棋子的基本规
 	}
 	if (o.v == 6) {
 		if (manhattan(ox, oy, nx, ny) != chebyshev(ox, oy, nx, ny)) return -3;
-		if (n.s==0) {//若未吃子
+		if (n.s == 0) {//若未吃子
 			if (ox == nx) {
 				int mxy, mny;
 				if (oy < ny) mxy = ny, mny = oy;
 				else mxy = oy, mny = ny;
-				for (int i = mny+1;i < mxy;i++) {
+				for (int i = mny + 1;i < mxy;i++) {
 					if (map[i][ox].s != 0) return -4;
 				}
 			}
@@ -244,7 +244,7 @@ int judge(int ox, int oy, int nx, int ny) {//-1：违反所有棋子的基本规
 				int mxx, mnx;
 				if (ox < nx) mxx = nx, mnx = ox;
 				else mxx = ox, mnx = nx;
-				for (int i = mnx+1;i < mxx;i++) {
+				for (int i = mnx + 1;i < mxx;i++) {
 					if (map[oy][i].s != 0) return -4;
 				}
 			}
@@ -255,7 +255,7 @@ int judge(int ox, int oy, int nx, int ny) {//-1：违反所有棋子的基本规
 				int mxy, mny;
 				if (oy < ny) mxy = ny, mny = oy;
 				else mxy = oy, mny = ny;
-				for (int i = mny+1;i < mxy;i++) {
+				for (int i = mny + 1;i < mxy;i++) {
 					if (map[i][ox].s != 0) cnt++;
 				}
 				if (cnt != 1) return -4;//若中间的棋子数不符合规定
@@ -265,7 +265,7 @@ int judge(int ox, int oy, int nx, int ny) {//-1：违反所有棋子的基本规
 				int mxx, mnx;
 				if (ox < nx) mxx = nx, mnx = ox;
 				else mxx = ox, mnx = nx;
-				for (int i = mnx+1;i < mxx;i++) {
+				for (int i = mnx + 1;i < mxx;i++) {
 					if (map[oy][i].s != 0) cnt++;
 				}
 				if (cnt != 1) return -4;
@@ -298,8 +298,8 @@ int main() {
 	system("chcp 65001 > nul");
 	system("cls");
 	init();
-	int x = 0, y = 0,oldx=0,oldy=0;
-	bool hh = 0, scted=0;//hh1为红方0为黑方
+	int x = 0, y = 0, oldx = 0, oldy = 0;
+	bool hh = 0, scted = 0;//hh1为红方0为黑方
 	while (1) {
 		for (int i = 0;i < 10;i++) {
 			for (int j = 0;j < 9;j++) {
@@ -334,9 +334,9 @@ int main() {
 		}
 		color(0, 7);
 		if (!hh) {
-			color(1,7);
+			color(1, 7);
 			std::cout << "红";
-			color(0,7);
+			color(0, 7);
 		}
 		else {
 			std::cout << "黑";
@@ -353,75 +353,75 @@ int main() {
 		int e;
 		if (hh == 0) e = 1;
 		else e = 2;
-		char c=_getch();
+		char c = _getch();
 		if (!scted) {
 			switch (c) {
-				case 'w':
-				case 'W':
-					if (y != 0) y--;
-					oldy = y;
+			case 'w':
+			case 'W':
+				if (y != 0) y--;
+				oldy = y;
+				break;
+			case 'a':
+			case 'A':
+				if (x != 0) x--;
+				oldx = x;
+				break;
+			case 's':
+			case 'S':
+				if (y < 9) y++;
+				oldy = y;
+				break;
+			case 'd':
+			case 'D':
+				if (x < 8) x++;
+				oldy = y;
+				break;
+			case '\n':
+			case '\r':
+				if (map[y][x].s != e) {
+					mgb(_T("该位置为对方棋子或空"), _T("错误"), MB_ICONWARNING | MB_OK);
 					break;
-				case 'a':
-				case 'A':
-					if (x != 0) x--;
-					oldx = x;
-					break;
-				case 's':
-				case 'S':
-					if (y < 9) y++;
-					oldy = y;
-					break;
-				case 'd':
-				case 'D':
-					if (x < 8) x++;
-					oldy = y;
-					break;
-				case '\n':
-				case '\r':
-					if (map[y][x].s != e) {
-						mgb(_T("该位置为对方棋子或空"), _T("错误"), MB_ICONWARNING | MB_OK);
-						break;
-					}
-					oldx = x;
-					oldy = y;
-					scted = !scted;
+				}
+				oldx = x;
+				oldy = y;
+				scted = !scted;
 			}
 		}
 		else {
 			switch (c) {
-				case 'w':
-				case 'W':
-					if (y != 0) y--;
+			case 'w':
+			case 'W':
+				if (y != 0) y--;
+				break;
+			case 'a':
+			case 'A':
+				if (x != 0) x--;
+				break;
+			case 's':
+			case 'S':
+				if (y < 9) y++;
+				break;
+			case 'd':
+			case 'D':
+				if (x < 8) x++;
+				break;
+			case '\n':
+			case '\r':
+				if (judge(oldx, oldy, x, y) < 0 && judge(oldx, oldy, x, y) != -5) {
+					std::cout << "不合法的走子位置,错误码为:（ - 1：违反所有棋子的基本规则 - 2，移动超出范围（仅对于将帅士仕生效） - 3：不符合除九宫限制外的普通走法 - 4：违反特殊走法（蹩马腿，塞象眼，吃子炮需炮架））" << judge(oldx, oldy, x, y);
+					_getch();
+					system("cls");
 					break;
-				case 'a':
-				case 'A':
-					if (x != 0) x--;
-					break;
-				case 's':
-				case 'S':
-					if (y < 9) y++;
-					break;
-				case 'd':
-				case 'D':
-					if (x < 8) x++;
-					break;
-				case '\n':
-				case '\r':
-					if (judge(oldx,oldy,x,y)<0&& judge(oldx, oldy, x, y)!=-5) {
-						std::cout << "不合法的走子位置,错误码为:（ - 1：违反所有棋子的基本规则 - 2，移动超出范围（仅对于将帅士仕生效） - 3：不符合除九宫限制外的普通走法 - 4：违反特殊走法（蹩马腿，塞象眼，吃子炮需炮架））"<< judge(oldx, oldy, x, y);
-						_getch();
-						system("cls");
-						break;
-					}
-					else if(judge(oldx, oldy, x, y) == -5){
-						scted = !scted;
-					}
-					else {
-						map[y][x] = map[oldy][oldx];
-						map[oldy][oldx] = { -1,0 };
-						scted = !scted;
-						hh = !hh;
-					}
+				}
+				else if (judge(oldx, oldy, x, y) == -5) {
+					scted = !scted;
+				}
+				else {
+					map[y][x] = map[oldy][oldx];
+					map[oldy][oldx] = { -1,0 };
+					scted = !scted;
+					hh = !hh;
+				}
 			}
 		}
 		system("cls");
@@ -436,5 +436,4 @@ int main() {
 			}
 		}
 	}
-}
-// 使用visual 2022 编译，OS: >= Windows10 1809注意：设置正确的编码
+}// 使用visual 2022 编译，OS: >= Windows10 1809注意：设置正确的编码
