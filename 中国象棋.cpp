@@ -12,6 +12,7 @@
 #ifndef COMMON_LVB_UNDERSCORE
 #define COMMON_LVB_UNDERSCORE 32768
 #endif
+#pragma execution_character_set("utf-8")//无语了……搞了这么多还是搞不定乱码
 std::wstring string_to_wstring(const std::string& str) {
 	std::setlocale(LC_ALL, "");  // 设置本地化
 	const char* cstr = str.c_str();
