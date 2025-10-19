@@ -9,39 +9,11 @@
 #include<cwchar>
 #include<cmath>
 #include<vector>
+#include<stack>
 #ifndef COMMON_LVB_UNDERSCORE
 #define COMMON_LVB_UNDERSCORE 32768
 #endif
 #pragma execution_character_set("utf-8")//无语了……搞了这么多还是搞不定乱码
-std::wstring string_to_wstring(const std::string& str) {
-	std::setlocale(LC_ALL, "");  // 设置本地化
-	const char* cstr = str.c_str();
-	size_t requiredSize = 0;
-
-	// 使用 mbstowcs_s 获取所需缓冲区大小
-	errno_t err = mbstowcs_s(&requiredSize, nullptr, 0, cstr, 0);
-
-	if (err != 0 || requiredSize == 0) {
-		return L"";
-	}
-
-	std::vector<wchar_t> buffer(requiredSize);
-
-	// 使用 mbstowcs_s 进行转换
-	err = mbstowcs_s(&requiredSize, buffer.data(), buffer.size(), cstr, str.size());
-
-	if (err != 0) {
-		return L"";
-	}
-
-	// 注意：mbstowcs_s 会在字符串末尾添加 null 终止符
-	// 所以我们需要去掉最后一个字符（如果是空字符）
-	if (!buffer.empty() && buffer.back() == L'\0') {
-		buffer.pop_back();
-	}
-
-	return std::wstring(buffer.data(), buffer.size());
-}
 void color(int x, int y) {
 	HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
 	int t = 0;
@@ -101,6 +73,10 @@ int manhattan(int x1, int y1, int x2, int y2) {
 	return x + y;
 }
 po map[10][9];
+struct archive {
+	po t[10][9];
+};
+std::stack<archive> archives;
 void init() {
 	for (int i = 0;i < 10;i++) {//先清空 
 		for (int j = 0;j < 9;j++) {
@@ -301,6 +277,13 @@ int main() {
 	init();
 	int x = 0, y = 0, oldx = 0, oldy = 0;
 	bool hh = 0, scted = 0;//hh1为红方0为黑方
+	archive tmp;
+	for (int i = 0;i < 10;i++) {
+		for (int j = 0;j < 9;j++) {
+			tmp.t[i][j] = map[i][j];
+		}
+	}
+	archives.push(tmp);
 	while (1) {
 		for (int i = 0;i < 10;i++) {
 			for (int j = 0;j < 9;j++) {
@@ -342,7 +325,7 @@ int main() {
 		else {
 			std::cout << "黑";
 		}
-		std::cout << "方回合,wasd调整位置，enter抬子/落子,绿色为当前选择项,当前";
+		std::cout << "方回合,wasd调整位置，enter抬子/落子,z悔棋，绿色为当前选择项,当前";
 		if (scted) {
 			color(3, 7);
 			std::cout << "已选择";
@@ -377,6 +360,24 @@ int main() {
 				if (x < 8) x++;
 				oldy = y;
 				break;
+			case 'z':
+			case 'Z':
+				if (archives.size()>=2) {
+					archives.pop();
+					archive tmp = archives.top();
+					for (int i = 0;i < 10;i++) {
+						for (int j = 0;j < 9;j++) {
+							map[i][j] = tmp.t[i][j];
+						}
+					}
+					hh = !hh;
+				}
+				else {
+					std::cout << "没有走棋记录";
+					_getch();
+					system("cls");
+				}
+				break;
 			case '\n':
 			case '\r':
 				if (map[y][x].s != e) {
@@ -406,6 +407,12 @@ int main() {
 			case 'D':
 				if (x < 8) x++;
 				break;
+			case 'z':
+			case 'Z':
+				std::cout << "悔棋仅在未选择时进行";
+				_getch();
+				system("cls");
+				break;
 			case '\n':
 			case '\r':
 				if (judge(oldx, oldy, x, y) < 0 && judge(oldx, oldy, x, y) != -5) {
@@ -422,6 +429,12 @@ int main() {
 					map[oldy][oldx] = { -1,0 };
 					scted = !scted;
 					hh = !hh;
+					for (int i = 0;i < 10;i++) {
+						for (int j = 0;j < 9;j++) {
+							tmp.t[i][j] = map[i][j];
+						}
+					}
+					archives.push(tmp);
 				}
 			}
 		}
@@ -437,4 +450,4 @@ int main() {
 			}
 		}
 	}
-}// 使用visual 2022 编译，OS: >= Windows10 1809注意：设置正确的编码
+}// 使用visual 2022 编译，OS: >= Windows10 1809可保证正常编译,注意：设置正确的编码
