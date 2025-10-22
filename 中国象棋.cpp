@@ -1,19 +1,20 @@
-#include<iostream>
 #include<windows.h>
 #include<algorithm>
+#include<iostream>
 #include<conio.h>
 #include<cstring>
-#include<string>
 #include<tchar.h>
 #include<cstdlib>
+#include<fstream>
+#include<string>
+#include<vector>
 #include<cwchar>
 #include<cmath>
-#include<vector>
 #include<stack>
 #ifndef COMMON_LVB_UNDERSCORE
 #define COMMON_LVB_UNDERSCORE 32768
 #endif
-#pragma execution_character_set("utf-8")//无语了……搞了这么多还是搞不定乱码
+#pragma execution_character_set("utf-8")//无语了……搞了这么多还是搞不定乱码，这行代码能否生效只能看运气
 void color(int x, int y) {
 	HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
 	int t = 0;
@@ -60,6 +61,7 @@ int mgb(const wchar_t* a, const wchar_t* b, unsigned int c) {
 struct po {
 	int v;//棋子类型,-1为空 ,1为将帅，2为士、仕 ，3为象、相，4为马，5为车，6为炮、砲 ，7为兵、卒 
 	int s;//阵营，1为红 2为黑，0为空 
+	//{-1,-1}为出错
 };
 int chebyshev(int x1, int y1, int x2, int y2) {
 	int x = abs(x1 - x2);
@@ -76,7 +78,39 @@ po map[10][9];
 struct archive {
 	po t[10][9];
 };
-std::stack<archive> archives;
+std::stack<archive> archives;//存储多个历史棋盘
+//真是暴力的存储方式
+
+struct archive_file {
+	po t[10][9];
+	bool hh;//存储在棋盘中需要记录谁走棋
+};
+archive_file read(std::string name) {
+	archive_file a;
+	a.t[0][0] = { -1,-1 };//若出错会返回这个
+	std::fstream file;
+	file.open(name.c_str(), std::ios::binary | std::ios::in);
+	if (!file.is_open()||file.bad()) {//未正常打开或流损坏
+		return a;
+	}
+	file.read(reinterpret_cast<char*>(&a), sizeof(archive_file));
+	if (file.fail()) {//操作失败
+		a.t[0][0] = { -1,-1 };
+	}
+	file.close();
+	return a;
+}
+void save(archive a, std::string name,bool hh) {
+	archive_file A{};
+	memcpy(A.t, a.t, sizeof(po) * 10 * 9);
+	A.hh = hh;
+	std::fstream file;
+	file.open(name.c_str(), std::ios::binary | std::ios::out);
+	file.write(reinterpret_cast<char*>(&A), sizeof(archive_file));
+	file.close();
+}//存档格式
+
+
 void init() {
 	for (int i = 0;i < 10;i++) {//先清空 
 		for (int j = 0;j < 9;j++) {
@@ -90,7 +124,6 @@ void init() {
 	map[0][4] = { 1,1 };//帅
 	map[2][1] = map[2][7] = { 6,1 };//炮
 	map[3][0] = map[3][2] = map[3][4] = map[3][6] = map[3][8] = { 7,1 };//兵
-
 	//-------------------------------------------------------------------
 	map[9][0] = map[9][8] = { 5,2 };//黑车
 	map[9][1] = map[9][7] = { 4,2 };//马
@@ -272,11 +305,28 @@ int judge(int ox, int oy, int nx, int ny) {//-1：违反所有棋子的基本规
 	return 1;
 }
 int main() {
-	system("chcp 65001 > nul");
+	system("chcp 65001 > nul");//无语了……搞了这么多还是搞不定乱码，这行代码能否生效只能看运气（*2）
 	system("cls");
 	init();
 	int x = 0, y = 0, oldx = 0, oldy = 0;
 	bool hh = 0, scted = 0;//hh1为红方0为黑方
+	if (mgb(_T("是否读取存档"), _T("提示"), MB_ICONQUESTION | MB_YESNO) == IDYES) {
+		std::string s;
+		std::cout << "输入存档名：";
+		std::cin >> s;
+		archive_file tmp;
+		tmp = read(s);
+		if (tmp.t[0][0].v==-1&& tmp.t[0][0].s == -1) {//见read函数，出错会返回这个
+			std::cout << "读取出错了qwq……将会使用初始棋盘";
+		}
+		else {
+			hh = tmp.hh;
+			memcpy(map, tmp.t, sizeof(po) * 10 * 9);
+			std::cout << "程序已经尝试读取……";
+		}
+		_getch();
+		system("cls");
+	}
 	archive tmp;
 	for (int i = 0;i < 10;i++) {
 		for (int j = 0;j < 9;j++) {
@@ -325,7 +375,7 @@ int main() {
 		else {
 			std::cout << "黑";
 		}
-		std::cout << "方回合,wasd调整位置，enter抬子/落子,z悔棋，绿色为当前选择项,当前";
+		std::cout << "方回合,wasd调整位置，enter抬子/落子,z悔棋，u存档，绿色为当前选择项,当前";
 		if (scted) {
 			color(3, 7);
 			std::cout << "已选择";
@@ -358,7 +408,20 @@ int main() {
 			case 'd':
 			case 'D':
 				if (x < 8) x++;
-				oldy = y;
+				oldx = x;
+				break;
+			case 'u':
+			case 'U':
+				if (1) {
+					system("cls");
+					std::string s;
+					std::cout << "输入存档名：";
+					std::cin >> s;
+					save(archives.top(), s, hh);
+					std::cout << "程序已尝试写入……";
+					_getch();
+					system("cls");
+				}
 				break;
 			case 'z':
 			case 'Z':
@@ -375,7 +438,7 @@ int main() {
 				else {
 					std::cout << "没有走棋记录";
 					_getch();
-					system("cls");
+					system("cls"); 
 				}
 				break;
 			case '\n':
@@ -434,7 +497,7 @@ int main() {
 							tmp.t[i][j] = map[i][j];
 						}
 					}
-					archives.push(tmp);
+					archives.push(tmp);//每次走子都存一次档
 				}
 			}
 		}
@@ -450,4 +513,4 @@ int main() {
 			}
 		}
 	}
-}// 使用visual 2022 编译，OS: >= Windows10 1809可保证正常编译,注意：设置正确的编码
+}// 使用visual 2022 编译，OS: >= Windows10 1809可保证正常编译,注意：由于目前我仍未找到万能的方法，请设置正确的编码再运行
