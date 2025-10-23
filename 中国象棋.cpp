@@ -51,7 +51,7 @@ void color(int x, int y) {
 	case 12:SetConsoleTextAttribute(handle, BACKGROUND_RED | BACKGROUND_GREEN | t);break;	//红+绿=黄
 	case 13:SetConsoleTextAttribute(handle, BACKGROUND_BLUE | BACKGROUND_GREEN | t);break;	//蓝+绿=青
 	case 14:SetConsoleTextAttribute(handle, BACKGROUND_GREEN | BACKGROUND_BLUE | BACKGROUND_RED | t);break;	//红+蓝+绿=白
-	default:break;
+	default:SetConsoleTextAttribute(handle,t);break;
 	}
 	return;
 }
@@ -338,11 +338,13 @@ int main() {
 		for (int i = 0;i < 10;i++) {
 			for (int j = 0;j < 9;j++) {
 				color(0, 7);
+				if (scted && judge(oldx, oldy, j, i) == 1) color(6, 7);
 				if (i == y && j == x) color(3, 7);
 				po t = map[i][j];
 				if (t.s == 0) std::cout << " +";
-				if (t.s == 1) {
+				if (t.s == 1){
 					color(1, 7);
+					if (scted && judge(oldx, oldy, j, i) == 1) color(6, 7);
 					if (i == y && j == x) color(3, 7);
 					if (t.v == 1) std::cout << "帥";
 					if (t.v == 2) std::cout << "仕";
@@ -354,6 +356,7 @@ int main() {
 				}
 				if (t.s == 2) {
 					color(0, 7);
+					if (scted && judge(oldx, oldy, j, i) == 1) color(6, 7);
 					if (i == y && j == x) color(3, 7);
 					if (t.v == 1) std::cout << "將";
 					if (t.v == 2) std::cout << "士";
@@ -375,7 +378,7 @@ int main() {
 		else {
 			std::cout << "黑";
 		}
-		std::cout << "方回合,wasd调整位置，enter抬子/落子,z悔棋，u存档，绿色为当前选择项,当前";
+		std::cout << "方回合,wasd调整位置，enter抬子/落子,z悔棋，u存档，绿色为当前选择项，天青色为当前选择项可以走的地方,当前";
 		if (scted) {
 			color(3, 7);
 			std::cout << "已选择";
